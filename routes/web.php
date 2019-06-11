@@ -16,3 +16,5 @@
 // });
 
 Route::get('/', 'MediaUploadController@index')->name('home');
+
+Route::post('mediaUpload', ['as'=>'mediaUpload','uses'=>'MediaUploadController@mediaUpload']);
