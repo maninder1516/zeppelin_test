@@ -7,65 +7,60 @@
 <a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/license.svg" alt="License"></a>
 </p>
 
-## About Laravel
+## About Project
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+This is test web application to upload images and produce the images in required resolutions.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Project Requirements
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+Requirements:
+1. Composer should be installed.
 
-## Learning Laravel
+2. GD Library should be installed and enabled
+2(a) Install according to PHp version - sudo apt-get install php7.1-gd
+2(b) Enable the library GD2. Open php.ini file, and then find the line:
+;extension=php_gd2.dll, remove the semicolon in the front to enable it.
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+3. Laravel Specific Requirements
+PHP >= 7.1.3
+BCMath PHP Extension
+Ctype PHP Extension
+JSON PHP Extension
+Mbstring PHP Extension
+OpenSSL PHP Extension
+PDO PHP Extension
+Tokenizer PHP Extension
+XML PHP Extension
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 1400 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+## Project Installation
 
-## Laravel Sponsors
+Project Installation Steps:
+1. Clone the Repositroy.
+-- git clone https://github.com/maninder1516/zeppelin_test.git
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
+2. Go to the directory. 
+-- cd project_name
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[British Software Development](https://www.britishsoftware.co)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- [UserInsights](https://userinsights.com)
-- [Fragrantica](https://www.fragrantica.com)
-- [SOFTonSOFA](https://softonsofa.com/)
-- [User10](https://user10.com)
-- [Soumettre.fr](https://soumettre.fr/)
-- [CodeBrisk](https://codebrisk.com)
-- [1Forge](https://1forge.com)
-- [TECPRESSO](https://tecpresso.co.jp/)
-- [Runtime Converter](http://runtimeconverter.com/)
-- [WebL'Agence](https://weblagence.com/)
-- [Invoice Ninja](https://www.invoiceninja.com)
-- [iMi digital](https://www.imi-digital.de/)
-- [Earthlink](https://www.earthlink.ro/)
-- [Steadfast Collective](https://steadfastcollective.com/)
-- [We Are The Robots Inc.](https://watr.mx/)
-- [Understand.io](https://www.understand.io/)
-- [Abdel Elrafa](https://abdelelrafa.com)
-- [Hyper Host](https://hyper.host)
+3. Copy the .env.example to .env and configure it with applicable data(Mainly DB details).
 
-## Contributing
+4. Run composer install.
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+5. Make sure the directories bootstrap/cache and storage are writable
+-- sudo chmod -R 777 /bootstrap/cache /storage
 
-## Security Vulnerabilities
+6. Run the migrations
+-- php artisan migrate
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+7. Run database seeder(for development and test only!)
+-- php artisan db:seed
+
+8. Now run the project either by configuring the virtual host or simply using laravel server
+-- php artisan serve
+
+9. Upload the required image and select the required resolutions in which  we want the image(media)
+
+10. It will deliver the required image
+
 
 ## License
 

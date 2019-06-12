@@ -4,6 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Log;
 
 class MediaUpload extends Model
 {
@@ -33,4 +34,21 @@ class MediaUpload extends Model
         'media_name.required' => 'The media is required. ',
         'resolution_id.required' => 'The resolution selection is required.',
     );
+
+     // Save media upload information
+    function saveMediaUpload($originalImage) {
+        try {
+            $imgOrigName = $originalImage->getClientOriginalName();
+
+            $this->media_name = $imgOrigName; 
+            $this->size = $originalImage->getSize(); // Get image size in Kbs
+            $this->extension = $originalImage->getClientOriginalExtension(); // Get file Extension 
+            $this->active = 1;
+            $this->save();
+        } catch (Exception $ex) {
+            // Log the error
+            Log::error("Method: " . __METHOD__ . ", Line " . __LINE__ . ": " . (string)$ex);
+            return redirect()->route('/');
+        }
+    }
 }

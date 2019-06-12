@@ -29,7 +29,7 @@ class MediaUploadController extends Controller
             $mediaUpload = MediaUpload::latest()->first();
 
             // Pass all the parameters to its view
-            return view('upload', ['mediaResolutions' => $mediaResolutions, 'mediaUpload'=>$mediaUpload ]);
+            return view('upload', ['mediaResolutions' => $mediaResolutions, 'mediaUpload' => $mediaUpload]);
         } catch (Exception $ex) {
             // Log the error
             Log::error("Method: " . __METHOD__ . ", Line " . __LINE__ . ": " . (string)$ex);
@@ -56,31 +56,32 @@ class MediaUploadController extends Controller
                 $imgOrigName = $originalImage->getClientOriginalName();
                 $image = Image::make($originalImage);
 
+                // Transaction-code
+                // DB::beginTransaction();
                 // Now save the record to our database
                 $mediaUpload = new MediaUpload;
-                $mediaUpload->media_name = $imgOrigName; 
-                $mediaUpload->size = $imgOrigName;
-                $mediaUpload->extension = $imgOrigName; 
-                $mediaUpload->active = 1;
-                $mediaUpload->save();
+                if ($mediaUpload->saveMediaUpload($originalImage)) {
+                    // Deliver the images in required resolutions
+                    foreach ($resolutionIds as $resId) {
+                        $mediaResolution = MediaResolution::find($resId);
+                        $imagePath = public_path() . '/uploads/' . $mediaResolution->resolution;
+                        $imgWidth = $mediaResolution->width;
+                        $imgHeight = $mediaResolution->height;
 
-                // Deliver the images in required resolutions
-                foreach($resolutionIds as $resId){
-                    $mediaResolution = MediaResolution::find($resId);
-                    $imagePath = public_path().'/uploads/'.$mediaResolution->resolution;
-                    $imgWidth = $mediaResolution->width;
-                    $imgHeight = $mediaResolution->height;
+                        // Resize image to required resolution
+                        $image->resize($imgWidth, $imgHeight);
+                        // Save the required image
+                        $image->save($imagePath . time() . $imgOrigName);
+                    }
 
-                    // Resize image to required resolution
-                    $image->resize($imgWidth, $imgHeight);
-                    // Save the required image
-                    $image->save($imagePath.time().$imgOrigName); 
-
-
+                    // DB::commit();
                     return back()->with('success', 'Image with required resolutions are cretaed.');
+                } else {
+                    
                 }
             }
         } catch (Exception $ex) {
+            // DB::rollback();
             // Log the error
             Log::error("Method: " . __METHOD__ . ", Line " . __LINE__ . ": " . (string)$ex);
             return redirect()->route('/');
