@@ -16,4 +16,11 @@ class UploadedMedia extends Model
      */
     protected $table = 'uploaded_medias';
 
+    /**
+     * Get the media upload that owns the uploaded media.
+     */
+    public function mediaupload()
+    {
+        return $this->belongsTo('App\MediaUpload', 'media_upload_id');
+    }
 }

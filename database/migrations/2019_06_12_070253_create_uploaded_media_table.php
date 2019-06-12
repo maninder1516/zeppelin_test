@@ -15,7 +15,8 @@ class CreateUploadedMediaTable extends Migration
     {
         Schema::create('uploaded_medias', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->smallInteger('upload_id');
+            $table->smallInteger('media_upload_id');
+            $table->string('name');
             $table->string('path');
             $table->smallInteger('width');
             $table->smallInteger('height');

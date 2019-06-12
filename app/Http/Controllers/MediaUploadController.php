@@ -28,7 +28,10 @@ class MediaUploadController extends Controller
             }
             // Get the latest uploaded media
             $mediaUpload = MediaUpload::latest()->first();
-
+            if($mediaUpload != null) {
+                $mediaUpload->load('uploadedmedias');
+            }
+           
             // Pass all the parameters to its view
             return view('upload', ['mediaResolutions' => $mediaResolutions, 'mediaUpload' => $mediaUpload]);
         } catch (Exception $ex) {
@@ -76,7 +79,8 @@ class MediaUploadController extends Controller
                             $image->save($imagePath . time() . $imgOrigName);
 
                             $uploadedMedia =  new UploadedMedia;
-                            $uploadedMedia->upload_id = $mediaUpload->id;
+                            $uploadedMedia->media_upload_id = $mediaUpload->id;
+                            $uploadedMedia->name = $mediaResolution->resolution.time().$imgOrigName;
                             $uploadedMedia->path = $imagePath;
                             $uploadedMedia->width = $imgWidth;
                             $uploadedMedia->height = $imgHeight;

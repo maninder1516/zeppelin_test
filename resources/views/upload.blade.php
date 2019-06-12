@@ -37,9 +37,26 @@
                         </div>
                     </div>
                 </div>
+
+                <!-- Show last uploaded images -->
+                <div class="col-md-4 justify-content-center">
+                    @if($mediaUpload)
+                    <div class="col-md-4">
+                        @if($mediaUpload->uploadedmedias)
+                        @forelse($mediaUpload->uploadedmedias as $media)
+                        <img width="600" height="300" src="{{asset('uploads/'.$media->name)}}" />
+                        @empty
+                        <span>No uploads found</span>
+                        @endforelse
+                        @endif
+                    </div>
+                    <div class="col-md-6"></div>
+                    @endif
+                </div>
+                <!-- ./Show last uploaded images -->
             </div>
         </div>
         {!! Form::close() !!}
     </div>
+    @endsection
 </div>
-@endsection

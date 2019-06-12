@@ -35,6 +35,14 @@ class MediaUpload extends Model
         'resolution_id.required' => 'The resolution selection is required.',
     );
 
+    /**
+     * Get the uploaded medias for the upload.
+     */
+    public function uploadedmedias()
+    {
+        return $this->hasMany('App\UploadedMedia');
+    }
+
      // Save media upload information
     function saveMediaUpload($originalImage) {
         try {
