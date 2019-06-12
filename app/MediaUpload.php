@@ -44,7 +44,11 @@ class MediaUpload extends Model
             $this->size = $originalImage->getSize(); // Get image size in Kbs
             $this->extension = $originalImage->getClientOriginalExtension(); // Get file Extension 
             $this->active = 1;
-            $this->save();
+            if ($this->save()) {
+                return true;
+            }
+    
+            return false;
         } catch (Exception $ex) {
             // Log the error
             Log::error("Method: " . __METHOD__ . ", Line " . __LINE__ . ": " . (string)$ex);

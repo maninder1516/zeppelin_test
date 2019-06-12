@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Input;
 use Log;
 use App\Messages;
 use App\MediaUpload;
+use App\UploadedMedia;
 use App\MediaResolution;
 use Image;
 
@@ -56,28 +57,52 @@ class MediaUploadController extends Controller
                 $imgOrigName = $originalImage->getClientOriginalName();
                 $image = Image::make($originalImage);
 
-                // Transaction-code
-                // DB::beginTransaction();
-                // Now save the record to our database
-                $mediaUpload = new MediaUpload;
-                if ($mediaUpload->saveMediaUpload($originalImage)) {
-                    // Deliver the images in required resolutions
-                    foreach ($resolutionIds as $resId) {
-                        $mediaResolution = MediaResolution::find($resId);
-                        $imagePath = public_path() . '/uploads/' . $mediaResolution->resolution;
-                        $imgWidth = $mediaResolution->width;
-                        $imgHeight = $mediaResolution->height;
+                if ($this->isDuplicate($imgOrigName)) {
+                    // Transaction-code
+                    // DB::beginTransaction();
+                    // Now save the record to our database
+                    $mediaUpload = new MediaUpload;
+                    if ($mediaUpload->saveMediaUpload($originalImage)) {
+                        // Deliver the images in required resolutions
+                        foreach ($resolutionIds as $resId) {
+                            $mediaResolution = MediaResolution::find($resId);
+                            $imagePath = public_path() . '/uploads/' . $mediaResolution->resolution;
+                            $imgWidth = $mediaResolution->width;
+                            $imgHeight = $mediaResolution->height;
 
-                        // Resize image to required resolution
-                        $image->resize($imgWidth, $imgHeight);
-                        // Save the required image
-                        $image->save($imagePath . time() . $imgOrigName);
+                            // Resize image to required resolution
+                            $image->resize($imgWidth, $imgHeight);
+                            // Save the required image
+                            $image->save($imagePath . time() . $imgOrigName);
+
+                            $uploadedMedia =  new UploadedMedia;
+                            $uploadedMedia->upload_id = $mediaUpload->id;
+                            $uploadedMedia->path = $imagePath;
+                            $uploadedMedia->width = $imgWidth;
+                            $uploadedMedia->height = $imgHeight;
+                            $uploadedMedia->active = 1;
+                            $uploadedMedia->save();
+                        }
+
+                        // DB::commit();
+                        Log::info('Media upload details saved successfully.');
+                        $request->session()->flash('message.level', 'success');
+                        $request->session()->flash('message.content', Messages::MEDIA_SAVE_SUCCESS);
+                        
+                        return redirect()->back()->withInput();
+                    } else {
+                        Log::error('Error while saving the upload media details.');
+                        $request->session()->flash('message.level', 'danger');
+                        $request->session()->flash('message.content', Messages::MEDIA_SAVE_ERROR);
+                        
+                        return redirect()->back()->withInput();
                     }
-
-                    // DB::commit();
-                    return back()->with('success', 'Image with required resolutions are cretaed.');
                 } else {
+                    Log::error('Duplicate image name found.');
+                    $request->session()->flash('message.level', 'danger');
+                    $request->session()->flash('message.content', Messages::MEDIA_NAME_DUPLICATED);
                     
+                    return redirect()->back()->withInput();
                 }
             }
         } catch (Exception $ex) {
@@ -86,5 +111,15 @@ class MediaUploadController extends Controller
             Log::error("Method: " . __METHOD__ . ", Line " . __LINE__ . ": " . (string)$ex);
             return redirect()->route('/');
         }
+    }
+
+    // Check for duplicate file name
+    protected function isDuplicate($imgOrigName) {
+        $media = MediaUpload::where('media_name', $imgOrigName)->first();
+
+        if($media == null){
+            return true;
+        }
+        return false;
     }
 }

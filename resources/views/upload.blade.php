@@ -2,10 +2,10 @@
 
 @section('content')
 <div class="container">
-    <div class="row justify-content-center">
-        <!-- Errors-section -->
-        @include('common.errors')
+    <!-- Success and Errors-section -->
+    @include('common.messages')
 
+    <div class="row justify-content-center">
         {!!Form::open(array('route' => 'mediaUpload', 'class'=>'form-horizontal col-md-10 col-md-offset-1', 'id'=>'upload_media' , 'enctype' => 'multipart/form-data')) !!}
         <div class="col-md-12">
             <div class="card">
