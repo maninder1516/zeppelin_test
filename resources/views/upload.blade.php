@@ -41,9 +41,11 @@
                 <!-- Show last uploaded images -->
                 <div class="col-md-4 justify-content-center">
                     @if($mediaUpload)
+                    <h3>Last uploaded images</h3>
                     <div class="col-md-4">
                         @if($mediaUpload->uploadedmedias)
                         @forelse($mediaUpload->uploadedmedias as $media)
+                        <label>{{ $media->name }} ( Width: {{ $media->width }} , Height: {{ $media->height }})</label>
                         <img width="600" height="300" src="{{asset('uploads/'.$media->name)}}" />
                         @empty
                         <span>No uploads found</span>
