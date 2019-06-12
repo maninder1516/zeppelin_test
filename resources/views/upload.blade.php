@@ -9,7 +9,7 @@
         {!!Form::open(array('route' => 'mediaUpload', 'class'=>'form-horizontal col-md-10 col-md-offset-1', 'id'=>'upload_media' , 'enctype' => 'multipart/form-data')) !!}
         <div class="col-md-12">
             <div class="card">
-                <div class="card-header">Upload Media</div>
+                <div class="card-header">{{ __('messages.upload_media') }}</div>
                 <div class="card-body">
                     <div class="col-md-8">
                         <div class="form-group">
@@ -26,14 +26,14 @@
                     </div>
                     <div class="col-md-6">
                         <div class="form-group">
-                            <label for="resolutions" class="col-md-4 control-label">Resolutions <span class="requiredfield">*</span></label>
+                            <label for="resolutions" class="col-md-4 control-label">{{ __('messages.resolutions') }} <span class="requiredfield">*</span></label>
                             {!! Form::select('resolution_id', $mediaResolutions, '', array('id'=>'resolution_id', 'name'=>'resolution_id[]', 'class'=>'form-control', 'multiple'=>'true')) !!}
                         </div>
                     </div>
 
                     <div class="col-md-4">
                         <div class="form-group box-footer">
-                            <button class="btn btn-primary">Upload</button>
+                            <button class="btn btn-primary">{{ __('messages.upload') }}</button>
                         </div>
                     </div>
                 </div>
@@ -41,7 +41,7 @@
                 <!-- Show last uploaded images -->
                 <div class="col-md-4 justify-content-center">
                     @if($mediaUpload)
-                    <h3>Last uploaded images</h3>
+                    <h3>{{ __('messages.last_uploaded_images') }}</h3>
                     <div class="col-md-4">
                         @if($mediaUpload->uploadedmedias)
                         @forelse($mediaUpload->uploadedmedias as $media)
